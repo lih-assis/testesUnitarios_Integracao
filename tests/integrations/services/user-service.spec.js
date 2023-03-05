@@ -3,12 +3,10 @@ const mongoose = require('mongoose')
 const { faker } = require('@faker-js/faker')
 
 const User = require('../../../src/schemas/User')
-const SessionController = require('../../../src/controllers/session-ctrl')
-const SessionService = require('../../../src/services/session-service')
-const { requestMock, requestMockByParam, responseMock } = require('../../mocks/controllers-mocks')
+const UserController = require('../../../src/controllers/user-ctrl')
+const { requestMock, responseMock, requestMockWithoutPassword, requestMockWithoutEmail } = require('../../mocks/controllers-mocks')
 
 const userDataMock = requestMock.body
-
 
 describe('[Integration] Session Service', () => {
     beforeAll(async () => {
@@ -20,64 +18,30 @@ describe('[Integration] Session Service', () => {
         await User.deleteMany({})
         mongoose.connection.close()
     })
-    
-    /*it('Should return 200 if valid credentials is provided', async () => {
-        const res = await SessionController.create(requestMock, responseMock)
+
+    it('Deve retornar um id se um usuário for criado', async () => {
+                   
+        const res = await UserController.create(requestMock, responseMock)
+
+        expect(res.data).toHaveProperty('id')
         expect(res.status).toBe(200)
-        expect(res.data).toHaveProperty('token')
     })
-
-    it('Should return 400 if an invalid email is provided', async () => {
-        const res = await SessionController.create(requestMockByParam({
-            name: faker.name.fullName(),
-            email: "invalidMail@mail",
-            password: faker.internet.password()
-        }), responseMock)
-
-        expect(res.status).toBe(400)
-        expect(res.data).toBe('Email inválido')
-    })
-
-    it('Should return 400 if password if not provided', async () => {
-        const res = await SessionController.create(requestMockByParam({
-            name: faker.name.fullName(),
-            email: faker.internet.email(),
-        }), responseMock)
-
-        expect(res.status).toBe(400)
+    
+    it('Deve retornar status 400 se a senha não for passada como parametro', async () => {
+           
+        const res = await UserController.create(requestMockWithoutPassword, responseMock)
+           
         expect(res.data).toBe('Senha inválida')
-    })
-
-    it('Should return 404 if user not found', async () => {
-        const res = await SessionController.create(requestMockByParam({
-            name: faker.name.fullName(),
-            email: faker.internet.email(),
-            password: faker.internet.password()
-        }), responseMock)
-
-        expect(res.status).toBe(404)
-        expect(res.data).toBe('Usuário não encontrado')
-    })
-
-    it('Should return 400 password does not match', async () => {
-        const res = await SessionController.create(requestMockByParam({
-            name: userDataMock.name,
-            email: userDataMock.email,
-            password: faker.internet.password()
-        }), responseMock)
-
         expect(res.status).toBe(400)
-        expect(res.data).toBe('As senhas não batem')
+            
+    })
+    
+    it('Deve retornar status 400 se o email não for passado como parametro', async () => {
+               
+        const res = await UserController.create(requestMockWithoutEmail, responseMock)
+        
+        expect(res.data).toBe('Email inválido')
+        expect(res.status).toBe(400)
     })
 
-    it('Should return 500 password does not match', async () => {
-        jest.spyOn(SessionService, 'generateToken').mockImplementationOnce(() => {
-            throw new Error()
-        })
-        
-        const res = await SessionController.create(requestMock, responseMock)
-
-        expect(res.status).toBe(500)
-        expect(res.data).toBe('Server Error')
-    })*/
 })

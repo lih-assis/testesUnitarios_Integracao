@@ -38,4 +38,12 @@ describe('User Controller', () => {
        
         expect(res.status).toBe(400)
     })
+
+    it('Deve retornar 200 se senha alterada', async () => {
+        jest.spyOn(UserService, 'createUser').mockImplementationOnce(UserServiceMock.createUser)
+    
+        const res = await UserController.changePassword(requestMockWithoutEmail, responseMock)
+       
+        expect(res.status).toBe(200)
+    })
 })

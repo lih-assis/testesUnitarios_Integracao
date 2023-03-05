@@ -70,7 +70,7 @@ describe('[Integration] Session Service', () => {
         expect(res.data).toBe('As senhas não batem')
     })
 
-    it('Should return 500 password does not match', async () => {
+    it('Should return 500 server does not match', async () => {
         jest.spyOn(SessionService, 'generateToken').mockImplementationOnce(() => {
             throw new Error()
         })

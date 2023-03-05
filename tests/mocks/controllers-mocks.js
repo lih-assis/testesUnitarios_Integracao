@@ -41,6 +41,14 @@ const responseMock = {
     }
 }
 
+const authorizationMock = (token) => {
+    return {
+        headers: {
+            authorization: token
+        }
+    }
+}
+
 
 module.exports = {
     responseMock,
@@ -48,4 +56,5 @@ module.exports = {
     requestMockWithoutEmail,
     requestMockWithoutPassword,
     requestMockByParam,
+    authorizationMock
 }
