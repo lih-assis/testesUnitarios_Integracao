@@ -19,4 +19,9 @@ describe('[Unit] - auths', () => {
         expect(spyemail).toHaveBeenCalled()
         expect(next).toHaveBeenCalled()
     })
+
+    it("Should return 401 if the Email is not provided", async() =>{
+        const result = await auth(authorizationMock("token"), responseMock, next )
+        expect(result.status).toBe(401)
+    })
 })

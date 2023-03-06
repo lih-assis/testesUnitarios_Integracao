@@ -46,4 +46,11 @@ describe('User Controller', () => {
        
         expect(res.status).toBe(200)
     })
+
+    it('Deve retornar 500 se houver um erro ao criar um usuário', async () => {
+        jest.spyOn(UserService, 'createUser').mockImplementationOnce(UserServiceMock.createUser)
+        
+        const res = await UserController.create("",responseMock)
+        expect(res.status).toBe(500)
+    })
 })
